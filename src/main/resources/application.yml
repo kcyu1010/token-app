@@ -1,0 +1,11 @@
+server:
+  port: 9010
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://43.246.213.36:3306/token
+    username: root
+    password: 4404050
+    hikari:
+      max-lifetime: 500000
