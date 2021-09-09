@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @SpringBootTest
 class SpringTokenApplicationTests {
@@ -25,6 +28,9 @@ class SpringTokenApplicationTests {
 
     @Test
     void contextLoads() {
+        GregorianCalendar calendar = new GregorianCalendar();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        System.out.println(hour);
     }
 
     @Test

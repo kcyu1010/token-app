@@ -167,8 +167,8 @@ public class TokenController {
                 return map;
             } else {
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("code", 400);
-                map.put("message", "验证失败");
+                map.put("code", 300);
+                map.put("message", "此时段非打卡时段，无法认证");
                 return map;
             }
         } catch (IOException e) {
