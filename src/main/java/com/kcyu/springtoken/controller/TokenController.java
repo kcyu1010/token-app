@@ -45,11 +45,18 @@ public class TokenController {
     public Map<String, Object> getTokenByName(@PathVariable String name){
         try {
             Token tokenByName = tokenService.findTokenByName(name);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("code",200);
+            if(tokenByName != null){
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("code",200);
+                map.put("message",tokenByName);
+                return map;
+            } else {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("code",300);
+                map.put("message","无此信息");
+                return map;
+            }
 
-            map.put("message",tokenByName);
-            return map;
         } catch (Exception e){
             System.out.println(e);
         }
@@ -68,13 +75,19 @@ public class TokenController {
      * @return java.util.List<com.kcyu.springtoken.entity.Token>
      **/
     @RequestMapping(value = "/getAll",method = {RequestMethod.GET})
-    public List<Token> getAllUserInfo(){
-        return tokenService.findAllToken();
+    public Map<String, Object> getAllUserInfo(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("code",200);
+        map.put("message",tokenService.findAllToken());
+        return map;
     }
 
     @RequestMapping(value = "/getAllUsable",method = {RequestMethod.GET})
-    public List<Token> getAllUseableUserInfo(){
-        return tokenService.findAllUsableToken();
+    public Map<String, Object> getAllUseableUserInfo(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("code",200);
+        map.put("message",tokenService.findAllUsableToken());
+        return map;
     }
 
 
@@ -105,5 +118,21 @@ public class TokenController {
         }
     }
 
+    @PostMapping("/updateIsCheck")
+    public Map<String, Object> updateIsCheck(@RequestBody Map info){
+        String who = (String) info.get("who");
+        int status = (int) info.get("status");
+        int i = tokenService.updateIsCheck(who, status);
+        Map<String, Object> map = new HashMap<>();
+        if(i > 0){
+            map.put("code",200);
+            map.put("message","更新成功");
+            return map;
+        } else {
+            map.put("code",400);
+            map.put("message","更新失败");
+            return map;
+        }
+    }
 }
 

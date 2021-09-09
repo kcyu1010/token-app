@@ -63,4 +63,14 @@ public class TokenServiceImpl extends ServiceImpl<TokenMapper, Token> implements
         int update = tokenMapper.update(token1, wrapper);
         return update;
     }
+
+    @Override
+    public int updateIsCheck(String who,int status) {
+        UpdateWrapper<Token> wrapper = new UpdateWrapper<>();
+        wrapper.eq("who",who);
+        Token token = new Token();
+        token.setIsCheck(status);
+        int update = tokenMapper.update(token,wrapper);
+        return update;
+    }
 }
