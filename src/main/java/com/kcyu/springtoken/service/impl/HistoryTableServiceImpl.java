@@ -63,6 +63,7 @@ public class HistoryTableServiceImpl extends ServiceImpl<HistoryTableMapper, His
     public List<HistoryTable> findHistoryByName(String who) {
         QueryWrapper<HistoryTable> wrapper = new QueryWrapper<>();
         wrapper.eq("who",who);
+        wrapper.orderByDesc("changedate");
         return historyTableMapper.selectList(wrapper);
     }
 }

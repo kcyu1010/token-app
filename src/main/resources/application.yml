@@ -1,10 +1,12 @@
 server:
   port: 9010
+  servlet:
+    context-path: /api
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://43.246.213.36:3306/token
+    url: jdbc:mysql://43.246.213.36:3306/token?serverTimezone=UTC
     username: root
     password: 4404050
     hikari:

@@ -24,4 +24,6 @@ public interface TokenService extends IService<Token> {
     List<Token> findAllUsableToken();
 
     int updateIsCheck(String who,int status);
+
+    int updateStatus(String who,int status);
 }

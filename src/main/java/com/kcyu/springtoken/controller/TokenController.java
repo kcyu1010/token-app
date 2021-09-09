@@ -1,6 +1,7 @@
 package com.kcyu.springtoken.controller;
 
 
+import com.kcyu.springtoken.app.RequestSender;
 import com.kcyu.springtoken.entity.HistoryTable;
 import com.kcyu.springtoken.entity.Token;
 import com.kcyu.springtoken.service.HistoryTableService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import javax.lang.model.element.VariableElement;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,5 +136,49 @@ public class TokenController {
             return map;
         }
     }
+
+    @PostMapping("/updateStatus")
+    public Map<String, Object> updateStatus(@RequestBody Map info){
+        String who = (String) info.get("who");
+        int status = (int) info.get("status");
+        int i = tokenService.updateStatus(who, status);
+        Map<String, Object> map = new HashMap<>();
+        if(i > 0){
+            map.put("code",200);
+            map.put("message","更新成功");
+            return map;
+        } else {
+            map.put("code",400);
+            map.put("message","更新失败");
+            return map;
+        }
+    }
+
+    @GetMapping("/verifyToken/{token}/{who}")
+    public Map<String, Object> updateString(@PathVariable String token,@PathVariable String who){
+        RequestSender requestSender = new RequestSender();
+        try {
+            Integer integer = requestSender.simulateRequest(token);
+            if(integer == 0){
+                tokenService.updateStatus(who,1);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("code", 200);
+                map.put("message", "验证成功");
+                return map;
+            } else {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("code", 400);
+                map.put("message", "验证失败");
+                return map;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("code", 400);
+            map.put("message", "验证失败");
+            return map;
+        }
+    }
+
 }
 
