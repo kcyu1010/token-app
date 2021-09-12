@@ -3,6 +3,8 @@ package com.kcyu.springtoken.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -22,6 +24,7 @@ public class HistoryTable extends Model<HistoryTable> {
     @TableId(value = "token")
     private String token;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Timestamp changedate;
 
     private String who;

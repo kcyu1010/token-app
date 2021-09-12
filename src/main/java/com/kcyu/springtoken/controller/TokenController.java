@@ -6,13 +6,17 @@ import com.kcyu.springtoken.entity.HistoryTable;
 import com.kcyu.springtoken.entity.Token;
 import com.kcyu.springtoken.service.HistoryTableService;
 import com.kcyu.springtoken.service.TokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
 import javax.lang.model.element.VariableElement;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/token")
 @ResponseBody()
+@Slf4j
 public class TokenController {
 
     @Autowired
@@ -90,6 +95,46 @@ public class TokenController {
         map.put("code",200);
         map.put("message",tokenService.findAllUsableToken());
         return map;
+    }
+
+    @RequestMapping(value="/save",method = {RequestMethod.POST})
+    public Map<String, Object> save(@RequestBody Token token){
+
+        if (tokenService.findKeyIsDuplicate("who", token.getWho())){
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("code",300);
+            map.put("message","用户名重复");
+            return map;
+        }
+
+        if(tokenService.findKeyIsDuplicate("token", token.getToken())){
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("code",300);
+            map.put("message","JWSESSION已存在，请检查");
+            return map;
+        }
+
+        boolean save = false;
+        try {
+            save = tokenService.save(token);
+        } catch (DuplicateKeyException e) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("code",300);
+            map.put("message",e.getLocalizedMessage());
+            return map;
+        }
+
+        if(save){
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("code",200);
+            map.put("message","新增成功");
+            return map;
+        } else {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("code",400);
+            map.put("message","新增失败");
+            return map;
+        }
     }
 
 
@@ -178,6 +223,12 @@ public class TokenController {
             map.put("message", "验证失败");
             return map;
         }
+    }
+
+    @GetMapping("/getTime/getTime")
+    public String testTime(){
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        return timestamp.toString();
     }
 
 }

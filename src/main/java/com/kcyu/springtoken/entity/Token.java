@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -21,17 +23,32 @@ public class Token extends Model<Token> {
 
     private static final long serialVersionUID=1L;
 
+    @TableId(value = "token")
     private String token;
 
-    @TableId(value = "who", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
+    @TableId(value = "who")
     private String who;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+//    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Timestamp lastupdatetime;
 
     private String chnName;
 
     private String updateTime;
+
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     private Integer status;
 
@@ -126,6 +143,7 @@ public class Token extends Model<Token> {
         return "Token{" +
         "token=" + token +
         ", who=" + who +
+        ", email=" + email +
         ", lastupdatetime=" + lastupdatetime +
         ", chnName=" + chnName +
         ", updateTime=" + updateTime +

@@ -26,4 +26,8 @@ public interface TokenService extends IService<Token> {
     int updateIsCheck(String who,int status);
 
     int updateStatus(String who,int status);
+
+    int addToken(Token token);
+
+    boolean findKeyIsDuplicate(String Key,Object Value);
 }

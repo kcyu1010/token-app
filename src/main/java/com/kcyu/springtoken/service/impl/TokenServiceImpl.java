@@ -9,6 +9,7 @@ import com.kcyu.springtoken.service.TokenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,19 @@ public class TokenServiceImpl extends ServiceImpl<TokenMapper, Token> implements
 
     @Autowired
     private TokenMapper tokenMapper;
+
+    @Override
+    public boolean findKeyIsDuplicate(String Key, Object Value) {
+        QueryWrapper<Token> wrapper = new QueryWrapper<>();
+        wrapper.eq(Key,Value);
+        List<Token> tokens = tokenMapper.selectList(wrapper);
+        return !tokens.isEmpty();
+    }
+
+    @Override
+    public int addToken(Token token) throws DuplicateKeyException {
+        return tokenMapper.insert(token);
+    }
 
     @Override
     public Token findTokenByName(String name) {
