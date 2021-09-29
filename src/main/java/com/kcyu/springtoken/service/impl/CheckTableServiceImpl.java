@@ -41,7 +41,16 @@ public class CheckTableServiceImpl extends ServiceImpl<CheckTableMapper, CheckTa
 
         QueryWrapper<CheckTable> wrapper = new QueryWrapper<>();
         wrapper.eq("who",who);
+        wrapper.orderByDesc("check_time");
         List<CheckTable> checkTables = checkTableMapper.selectList(wrapper);
         return checkTables;
+    }
+
+    @Override
+    public List<CheckTable> enumRecordsName() {
+        QueryWrapper<CheckTable> wrapper = new QueryWrapper<>();
+        wrapper.select("distinct who");
+        List<CheckTable> row = checkTableMapper.selectList(wrapper);
+        return row;
     }
 }

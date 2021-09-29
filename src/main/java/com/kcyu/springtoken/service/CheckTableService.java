@@ -18,4 +18,6 @@ public interface CheckTableService extends IService<CheckTable> {
 
     List<CheckTable> getCheckRecordsByName(String who);
 
+    List<CheckTable> enumRecordsName();
+
 }

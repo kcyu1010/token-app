@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import javax.lang.model.element.VariableElement;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -64,5 +62,17 @@ public class CheckTableController {
 
     }
 
+    @GetMapping("/getRecordsRow")
+    public Map<String,Object> getRecordsRow(){
+        List<CheckTable> enumRecordsName = checkTableService.enumRecordsName();
+        ArrayList<String> arrayList = new ArrayList<>();
+        for(CheckTable x: enumRecordsName){
+            arrayList.add(x.getWho());
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code",200);
+        map.put("data",arrayList);
+        return map;
+    }
 }
 
