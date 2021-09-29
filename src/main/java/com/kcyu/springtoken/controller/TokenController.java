@@ -4,6 +4,7 @@ package com.kcyu.springtoken.controller;
 import com.kcyu.springtoken.app.RequestSender;
 import com.kcyu.springtoken.entity.HistoryTable;
 import com.kcyu.springtoken.entity.Token;
+import com.kcyu.springtoken.service.CheckTableService;
 import com.kcyu.springtoken.service.HistoryTableService;
 import com.kcyu.springtoken.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class TokenController {
     @Autowired
     private HistoryTableService historyTableService;
 
+    @Autowired
+    private CheckTableService checkTableService;
+
     /*
      * @Author KC-Yu
      * @Description //TODO 通过名字获取Token
@@ -48,7 +52,7 @@ public class TokenController {
      * @Param [name]
      * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
-    @RequestMapping("/{name}")
+    @RequestMapping(value = "/{name}",method = {RequestMethod.GET})
     public Map<String, Object> getTokenByName(@PathVariable String name){
         try {
             Token tokenByName = tokenService.findTokenByName(name);
@@ -187,6 +191,8 @@ public class TokenController {
         String who = (String) info.get("who");
         int status = (int) info.get("status");
         int i = tokenService.updateStatus(who, status);
+        int addCheckRecord = checkTableService.addCheckRecord(who, status);
+        System.out.println(addCheckRecord);
         Map<String, Object> map = new HashMap<>();
         if(i > 0){
             map.put("code",200);
